@@ -28,7 +28,7 @@ export const HERO_CONTENT = {
     "Building digital experiences that merge creativity with technical excellence",
   resumeLinkText: "Download Resume",
   //resumeLink: "/Samrendra_onePage_resume.pdf",
-  resumeLink: "/Samrendra_OnePage_resume.pdf",
+  resumeLink: "/Samrendra_One_Page_resume.pdf",
 };
 
 export const PROJECTS = [

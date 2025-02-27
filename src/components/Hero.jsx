@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { HERO_CONTENT } from "../constants";
 
+const OPENWEATHER_API_KEY = "b245ddd598a64ec6d8e4250963f9514c";
+
 const getCelestialData = () => {
   const now = new Date();
   const hours = now.getHours();
@@ -21,11 +23,46 @@ const getCelestialData = () => {
 
 const Hero = () => {
   const [celestialData, setCelestialData] = useState(getCelestialData());
+  const [location, setLocation] = useState("");
+  const [temperature, setTemperature] = useState("");
   
   useEffect(() => {
     const interval = setInterval(() => {
       setCelestialData(getCelestialData());
     }, 1000);
+    
+    // Get user's location and weather
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          
+          // Get location name
+          fetch(`https://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=${OPENWEATHER_API_KEY}`)
+            .then(res => res.json())
+            .then(data => {
+              if (data && data.length > 0) {
+                setLocation(`${data[0].name}, ${data[0].country}`);
+              }
+            });
+
+          // Get weather data
+          fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${OPENWEATHER_API_KEY}`)
+            .then(res => res.json())
+            .then(data => {
+              if (data.main) {
+                setTemperature(`${Math.round(data.main.temp)}°C`);
+              }
+            });
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+          setLocation("Bengaluru, India");
+          setTemperature("28°C");
+        }
+      );
+    }
+
     return () => clearInterval(interval);
   }, []);
 
@@ -46,7 +83,7 @@ const Hero = () => {
 
   return (
     <section className="min-h-screen flex flex-col md:flex-row items-center justify-center px-8 py-16 gap-8">
-      {/* Left Content */}
+      {/* left Content */}
       <motion.div 
         className="w-full md:w-1/2 space-y-6"
         initial="hidden"
@@ -235,7 +272,7 @@ const Hero = () => {
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 backdrop-blur-lg bg-black/30 p-4 rounded-2xl text-center shadow-xl space-y-1 w-[200px]">
             <div className="text-2xl font-medium">{celestialData.timeString}</div>
             <div className="text-sm text-gray-300">{celestialData.dateString}</div>
-            <div className="text-sm text-gray-300">Bengaluru, India • 28°C</div>
+            <div className="text-sm text-gray-300"> {location} • {temperature}</div>
           </div>
 
           {/* Ambient Particles */}
