@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  /* Celestial animations */
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  @keyframes wave {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(20deg); }
+    75% { transform: rotate(-20deg); }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 4s ease-in-out infinite;
+  }
+
+  .animate-twinkle {
+    animation: twinkle 2s infinite;
+  }
+
+  .animate-wave {
+    animation: wave 1s ease-in-out infinite;
+  }
+
+  /* Text effects */
+  .text-gradient {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Earth styling */
+  .earth-core {
+    @apply absolute inset-0 rounded-full bg-gradient-to-b from-blue-400/30 to-emerald-300/30 backdrop-blur-xl shadow-inner shadow-black/30;
+  }
+
+  .atmosphere-glow {
+    @apply absolute inset-0 rounded-full border-4 border-blue-200/20;
+  }
+}
+
+:root {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  background: #000000;
+  color: #ffffff;
+  scroll-behavior: smooth;
+}
+
+/* Section Margins */
+#work,
+#about,
+#experience,
+#testimonials,
+#contact {
+  scroll-margin-top: 80px;
+}
